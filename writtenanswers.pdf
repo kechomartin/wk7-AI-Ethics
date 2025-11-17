@@ -1,0 +1,236 @@
+# AI Ethics Assignment.
+## Theme: "Designing Responsible and Fair AI Systems"
+
+---
+
+# Part 1: Theoretical Understanding (30%)
+
+## 1. Short Answer Questions
+
+### Q1: Define algorithmic bias and provide two examples of how it manifests in AI systems.
+
+**Definition:**
+Algorithmic bias refers to systematic and repeatable errors in computer systems that create unfair outcomes, favoring certain groups over others. This bias typically stems from biased training data, flawed algorithm design, or prejudiced assumptions embedded during development.
+
+**Example 1: Healthcare Risk Prediction**
+An algorithm used by US hospitals to allocate care systematically underestimated the health needs of Black patients compared to white patients with similar conditions, because it used healthcare spending as a proxy for health needs—and Black patients historically had less money spent on their care due to systemic inequities.
+
+**Example 2: Criminal Justice Risk Assessment**
+The COMPAS system, used to predict recidivism risk, showed higher false positive rates for Black defendants (incorrectly labeling them as high-risk) compared to white defendants, leading to harsher sentencing and bail decisions.
+
+---
+
+### Q2: Explain the difference between transparency and explainability in AI. Why are both important?
+
+**Transparency** refers to openness about how an AI system works at a systemic level—disclosing what data is used, what the model architecture is, who built it, and what its intended purpose is. It's about making the AI system's components and processes visible and accessible for scrutiny.
+
+**Explainability** (or interpretability) refers to the ability to understand and articulate why an AI system made a specific decision in human-understandable terms. It answers "why did the model predict X for this particular case?"
+
+**Why Both Matter:**
+
+- **Transparency** builds trust and enables accountability by allowing stakeholders to understand the system's design and identify potential issues before deployment.
+
+- **Explainability** is crucial for debugging errors, ensuring compliance with regulations, building user trust, and enabling individuals to challenge decisions that affect them (like loan denials or medical diagnoses). A transparent system that isn't explainable may still be a "black box" for specific decisions.
+
+---
+
+### Q3: How does GDPR (General Data Protection Regulation) impact AI development in the EU?
+
+GDPR significantly impacts AI development through several key provisions:
+
+**1. Right to Explanation**
+Article 22 grants individuals the right not to be subject to solely automated decision-making and to receive meaningful information about the logic involved, necessitating explainable AI.
+
+**2. Data Minimization and Purpose Limitation**
+AI systems can only collect and process data that's necessary for specified, legitimate purposes, restricting indiscriminate data collection for training.
+
+**3. Consent Requirements**
+Using personal data for AI training requires explicit, informed consent, impacting how datasets are collected.
+
+**4. Data Protection by Design**
+AI systems must incorporate privacy considerations from the design phase, including techniques like differential privacy and federated learning.
+
+**5. Accountability and Documentation**
+Organizations must maintain records of AI processing activities and conduct Data Protection Impact Assessments for high-risk AI systems.
+
+These requirements push EU AI developers toward more ethical, transparent, and privacy-preserving approaches, though they can increase development costs and complexity.
+
+---
+
+## 2. Ethical Principles Matching
+
+Match the following principles to their definitions:
+
+**A) Justice** → **4. Fair distribution of AI benefits and risks**
+
+**B) Non-maleficence** → **1. Ensuring AI does not harm individuals or society**
+
+**C) Autonomy** → **2. Respecting users' right to control their data and decisions**
+
+**D) Sustainability** → **3. Designing AI to be environmentally friendly**
+
+---
+
+# Part 2: Case Study Analysis (40%)
+
+## Case 1: Biased Hiring Tool
+
+**Scenario:** Amazon's AI recruiting tool penalized female candidates.
+
+### Task 1: Identify the source of bias
+
+Amazon's AI recruiting tool exhibited bias primarily due to **historical training data bias**. The system was trained on resumes submitted to Amazon over a 10-year period, predominantly from male candidates in a male-dominated tech industry. The model learned to penalize resumes containing words associated with women, such as "women's" (as in "women's chess club captain") and downgraded graduates from all-women's colleges.
+
+**Secondary issues included:**
+- **Proxy discrimination**: The model identified patterns correlated with gender even when gender wasn't explicitly labeled
+- **Lack of diverse development teams**: Insufficient consideration of fairness during design phase
+
+---
+
+### Task 2: Propose three fixes to make the tool fairer
+
+**Fix 1: Rebalanced Training Data with Synthetic Augmentation**
+
+Create a balanced dataset by either: (a) oversampling underrepresented groups, (b) generating synthetic resumes for female candidates using techniques like SMOTE or GANs, or (c) using adversarial debiasing where a secondary model tries to predict gender and the primary model is trained to make predictions independent of what the adversarial model learns. Ensure training data represents the desired diversity of the applicant pool, not just historical patterns.
+
+**Fix 2: Implement Fairness Constraints During Model Training**
+
+Use constrained optimization approaches that explicitly penalize disparate impact during training. Apply techniques from fairness-aware machine learning such as prejudice remover regularization or equalized odds post-processing. Remove or neutralize gender-proxy features (word embeddings associated with gender, institution names, etc.).
+
+**Fix 3: Human-in-the-Loop Hybrid System**
+
+Redesign the system as a decision-support tool rather than an automated decision-maker. Implement mandatory human review for all recommendations with audit trails. Train HR staff on bias recognition and provide diverse panels for candidate evaluation. Use AI to expand candidate pools rather than narrow them, surfacing diverse candidates who might be overlooked.
+
+---
+
+### Task 3: Suggest metrics to evaluate fairness post-correction
+
+**1. Demographic Parity (Statistical Parity)**
+Measure whether the selection rate is approximately equal across gender groups.
+- Formula: P(Ŷ=1|Gender=Male) ≈ P(Ŷ=1|Gender=Female)
+
+**2. Equal Opportunity**
+Ensure true positive rates are similar across groups—qualified candidates from all groups should have equal chances of being selected.
+- Formula: P(Ŷ=1|Y=1, Gender=Male) ≈ P(Ŷ=1|Y=1, Gender=Female)
+
+**3. Disparate Impact Ratio**
+Calculate the ratio of selection rates between groups (should be ≥ 0.8 per the "80% rule").
+- Formula: P(Ŷ=1|Gender=Female) / P(Ŷ=1|Gender=Male) ≥ 0.8
+
+**4. Calibration by Group**
+Verify that among candidates given the same score, actual success rates are similar across groups.
+
+**5. Individual Fairness Metrics**
+Measure whether similar candidates receive similar scores regardless of protected attributes.
+
+---
+
+## Case 2: Facial Recognition in Policing
+
+**Scenario:** A facial recognition system misidentifies minorities at higher rates.
+
+### Task 1: Discuss ethical risks
+
+**1. Wrongful Arrests and Miscarriages of Justice**
+
+Higher misidentification rates for minorities lead to false matches, resulting in wrongful detention and criminal charges. Real-world cases include Robert Williams (Detroit) and Michael Oliver, both Black men wrongfully arrested due to facial recognition errors. These errors can have cascading effects: lost employment, legal costs, trauma, and permanent criminal records.
+
+**2. Privacy Violations and Mass Surveillance**
+
+Facial recognition enables warrantless, dragnet surveillance of public spaces. It creates persistent tracking of individuals' movements and associations without consent. This has a chilling effect on free speech and assembly, particularly for marginalized communities.
+
+**3. Exacerbation of Systemic Discrimination**
+
+Over-policing of minority communities combined with biased technology compounds existing racial disparities in criminal justice. It reinforces prejudicial patterns: minorities face both higher surveillance and higher error rates.
+
+**4. Erosion of Due Process**
+
+Officers may over-rely on algorithmic outputs, treating probabilistic matches as definitive evidence. Lack of transparency in how systems work prevents effective legal challenges. Defendants often cannot access or challenge the technology used against them.
+
+**5. Accountability Gaps**
+
+It's difficult to trace responsibility when errors occur (vendor, department, individual officers?). Proprietary systems resist independent auditing. There are no consistent standards for accuracy thresholds or use protocols.
+
+---
+
+### Task 2: Recommend policies for responsible deployment
+
+**Policy 1: Strict Accuracy and Bias Testing Requirements**
+
+- Mandate independent, third-party testing on demographically diverse datasets before deployment
+- Require minimum accuracy thresholds (e.g., <0.1% false positive rate) across all demographic groups
+- Continuous monitoring and annual recertification with published audit results
+- Prohibition on use until technology meets equity standards across all demographics
+
+**Policy 2: Limited Use Scope and Human Oversight**
+
+- Restrict use to serious violent crimes (not minor offenses or quality-of-life violations)
+- Facial recognition should only be investigative lead—never sole basis for arrest or search warrant
+- Require independent human verification and probable cause before any enforcement action
+- Ban real-time surveillance; limit to post-event investigations with judicial oversight
+
+**Policy 3: Transparency and Accountability Framework**
+
+- Public disclosure of when and how facial recognition is used, including vendor information
+- Mandatory documentation for every search: justification, results, and outcomes
+- Create accessible appeal process for individuals incorrectly identified
+- Establish civilian oversight boards with authority to review and restrict use
+- Implement strict data retention limits (automatic deletion after investigation closes)
+
+**Policy 4: Community Consent and Democratic Control**
+
+- Require legislative approval and public comment periods before adoption
+- Allow communities to opt out through local ordinances
+- Regular community reporting on usage statistics and accuracy
+- Prioritize community safety concerns over surveillance expansion
+
+**Policy 5: Legal Protections and Remedies**
+
+- Establish clear liability for wrongful arrests from misidentification
+- Create civil remedies for privacy violations
+- Prohibit evidence obtained through unauthorized facial recognition
+- Protect the right to challenge facial recognition evidence in court with access to system details
+
+---
+
+# Part 4: Ethical Reflection (5%)
+
+## Reflection: Ensuring Ethical AI in Future Projects
+
+**Prompt:** Reflect on a personal project (past or future). How will you ensure it adheres to ethical AI principles?
+
+As I consider how to apply ethical AI principles to my future work, I recognize that ethics must be woven into every stage of development—not treated as an afterthought.
+
+**In a hypothetical medical diagnosis assistant project**, I would implement several safeguards:
+
+### Data Collection & Preparation
+
+I'd ensure training data represents diverse patient populations across race, gender, age, and socioeconomic status. I'd actively audit for proxy discrimination—where seemingly neutral features (like zip code) encode protected attributes. Partnering with healthcare providers serving underrepresented communities would be essential.
+
+### Development Phase
+
+I'd apply fairness-aware machine learning techniques, setting explicit constraints that model performance must be equitable across demographic groups. Rather than optimizing solely for accuracy, I'd balance multiple objectives including equal opportunity and calibration by group. Regular bias testing would occur throughout development, not just at the end.
+
+### Transparency & Explainability
+
+I'd implement interpretable model architectures or post-hoc explanation methods (SHAP, LIME) so clinicians understand why specific diagnoses are suggested. This builds trust and enables error detection.
+
+### Human-Centered Design
+
+The system would augment—not replace—human judgment. Clinicians would retain final decision authority with AI serving as a second opinion. I'd include prominent uncertainty quantification so users understand confidence levels.
+
+### Ongoing Monitoring
+
+Post-deployment, I'd establish continuous monitoring for fairness drift, tracking how the system performs across different patient groups over time. Feedback loops from healthcare providers and patients would inform iterative improvements.
+
+### Privacy & Consent
+
+Following GDPR principles, I'd implement differential privacy techniques, minimize data collection to what's necessary, and ensure transparent consent processes where patients understand how their data contributes to AI training.
+
+**Ultimately, ethical AI requires humility**—recognizing that our systems will have blind spots and committing to continuous improvement guided by the communities they serve.
+
+---
+
+## End of Written Answers
+
+**Note:** This document should be converted to PDF format for submission along with the code repository (Part 3) and bonus policy proposal.
